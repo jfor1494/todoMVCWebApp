@@ -1,11 +1,8 @@
-# web.py (Vista)
 import streamlit as st
 import model
 import controller
 
 todos = model.get_todos()
-if "new_todo" not in st.session_state:
-    st.session_state.new_todo = ""
 
 st.title("My todo App")
 st.subheader("This is my todo app.")
@@ -19,9 +16,11 @@ for index, todo in enumerate(todos):
         del st.session_state[todo]
         st.experimental_rerun()
 
-new_todo = st.text_input(label="", value=st.session_state["new_todo"], placeholder="Add new todo...", key="new_todo")
+new_todo = st.text_input(label="", placeholder="Add new todo...", key="new_todo")
 if new_todo:
-    todos, message = controller.add_todo(todos, new_todo)
+    todos, message = controller.add_todo(todos)
     if message:
         st.warning(message)
-    st.session_state["new_todo"] = ""
+    else:
+        st.session_state["new_todo"] = ""
+        st.experimental_rerun()
